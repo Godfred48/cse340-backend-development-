@@ -15,10 +15,8 @@ const app = express();
 //set engine 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'src/views'));  //directs the server to where the ejs templates are located.
-
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 /**
   * Routes
@@ -32,6 +30,11 @@ app.get('/organizations', (req, res) => {
     const title = 'Organizations';
     res.render( 'organizations' , {title})
 });
+
+app.get('/categories', (req, res) => {
+    const title = 'Categories';
+    res.render ('categories' , {title})
+})
 
 app.get('/projects', (req, res) => {
     const title = 'Projects';
