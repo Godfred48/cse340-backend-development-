@@ -74,3 +74,73 @@ VALUES
 
 
   SELECT * FROM public.service_project;
+
+
+  -- Category table
+CREATE TABLE public.category (
+    category_id   SERIAL PRIMARY KEY,
+    name          VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- Junction table (links projects to categories)
+CREATE TABLE public.project_category (
+    project_id    INT NOT NULL,
+    category_id   INT NOT NULL,
+
+    PRIMARY KEY (project_id, category_id),
+
+    CONSTRAINT fk_project
+        FOREIGN KEY (project_id)
+        REFERENCES public.service_project(project_id)
+        ON DELETE CASCADE,
+
+    CONSTRAINT fk_category
+        FOREIGN KEY (category_id)
+        REFERENCES public.category(category_id)
+        ON DELETE CASCADE
+);
+
+INSERT INTO public.category (name)
+VALUES
+    ('Construction & Infrastructure'),
+    ('Environment & Sustainability'),
+    ('Community Support'),
+    ('Education & Training'),
+    ('Food & Agriculture');
+
+-- BrightFuture Builders projects (Construction & Infrastructure = 1, Education = 4)
+INSERT INTO public.project_category (project_id, category_id) VALUES
+    (1, 1),  -- Community Center Renovation → Construction
+    (2, 1),  -- School Roof Repair → Construction
+    (2, 4),  -- School Roof Repair → Education
+    (3, 1),  -- Playground Construction → Construction
+    (3, 3),  -- Playground Construction → Community Support
+    (4, 1),  -- Library Expansion → Construction
+    (4, 4),  -- Library Expansion → Education
+    (5, 1),  -- Water Tank Installation → Construction
+    (5, 2),  -- Water Tank Installation → Environment
+
+-- GreenHarvest Growers projects (Environment = 2, Food = 5, Education = 4)
+    (6, 2),  -- Rooftop Garden Setup → Environment
+    (6, 5),  -- Rooftop Garden Setup → Food & Agriculture
+    (7, 2),  -- Composting Workshop → Environment
+    (7, 4),  -- Composting Workshop → Education
+    (8, 5),  -- School Farm Program → Food & Agriculture
+    (8, 4),  -- School Farm Program → Education
+    (9, 5),  -- Seed Sharing Drive → Food & Agriculture
+    (9, 2),  -- Seed Sharing Drive → Environment
+    (10, 4), -- Urban Irrigation Training → Education
+    (10, 5), -- Urban Irrigation Training → Food & Agriculture
+
+-- UnityServe Volunteers projects (Community = 3, Environment = 2, Education = 4)
+    (11, 3), -- Food Bank Support → Community Support
+    (11, 5), -- Food Bank Support → Food & Agriculture
+    (12, 3), -- Elder Care Visits → Community Support
+    (13, 2), -- Beach Cleanup → Environment
+    (13, 3), -- Beach Cleanup → Community Support
+    (14, 3), -- Charity Fundraiser Run → Community Support
+    (15, 3), -- Back to School Drive → Community Support
+    (15, 4); -- Back to School Drive → Education
+
+
+SELECT * FROM public.project_category;

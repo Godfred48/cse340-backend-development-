@@ -3,11 +3,10 @@
     <h1><%= title %></h1>
     <p>Explore our various service categories to find opportunities that match your interests!</p>
 
-     <ul>
-        <li>Environmental</li>
-        <li>Educational</li>
-        <li>Communnity Service</li>
-        <li>Health Wellness</li>
+    <ul>
+        <% categories.forEach(category => { %>
+            <li><%= category.name %></li>
+        <% }); %>
     </ul>
 </main>
 <%- include('partials/footer') %>
