@@ -467,6 +467,8 @@ footer a {
 footer a:hover {
   color: var(--warm-white);
 }
+
+
  
 /* ── Utility Classes ──────────────────────────────────────── */
 .text-center { text-align: center; }

@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { testConnection } from './src/models/db.js';
 import { getAllOrganizations } from './src/models/organizations.js';
+import { getAllProjects } from './src/models/projects.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -39,9 +40,10 @@ app.get('/categories', (req, res) => {
     res.render ('categories' , {title})
 });
 
-app.get('/projects', (req, res) => {
+app.get('/projects', async(req, res) => {
+    const projects = await getAllProjects();
     const title = 'Projects';
-    res.render( 'projects' , {title})
+    res.render( 'projects' , {title, projects});
 });
 
 //the app.listen have been updated to include a test connection to the database before starting the server.
