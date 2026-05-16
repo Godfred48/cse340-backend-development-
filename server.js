@@ -1,6 +1,8 @@
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { testConnection } from './src/models/db.js';
+import { getAllOrganizations } from './src/models/organizations.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,23 +28,31 @@ app.get('/', (req, res) => {
     res.render( 'home' , {title})
 });
 
-app.get('/organizations', (req, res) => {
+app.get('/organizations', async(req, res) => {
+    const organizations = await getAllOrganizations();
     const title = 'Organizations';
-    res.render( 'organizations' , {title})
+    res.render( 'organizations' , {title, organizations});
 });
 
 app.get('/categories', (req, res) => {
     const title = 'Categories';
     res.render ('categories' , {title})
-})
+});
 
 app.get('/projects', (req, res) => {
     const title = 'Projects';
     res.render( 'projects' , {title})
 });
 
-
-app.listen(PORT, (()=>{
-    console.log(`Server running at http://127.0.0.1:${PORT}`);
+//the app.listen have been updated to include a test connection to the database before starting the server.
+//  This ensures that the server only starts if the database connection is successful, 
+// and it provides feedback in the console about the connection status.
+app.listen(PORT, async () => {
+  try {
+    await testConnection();
+    console.log(`Server is running at http://127.0.0.1:${PORT}`);
     console.log(`Environment: ${NODE_ENV}`);
-}))
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+  }
+});
